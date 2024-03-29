@@ -1,5 +1,14 @@
 const {check, validationResult} = require("express-validator");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
+require('dotenv').config();
+const fs = require("fs");
+
+
+// Read the private key
+const privateKeyPath = process.env.PRIVATE_KEY_PATH;
+const privateKey = fs.readFileSync(privateKeyPath, 'utf8');
+
 
 const validUserTypes = ["Admin", "Provincial", "Station", "Guest"];
 
@@ -53,7 +62,23 @@ const signUpValidation = (req, res, next) => {
 const hashPassword = async (password) => {
    return bcrypt.hash(password, 10);
   };
+
+const verifyPassword = async (password, hash) => {
+    // Validate password by comparing with the hash
+    return bcrypt.compare(password, hash);
+  };
+
+//create webtokens
+const maxAge = 3 * 24 * 60 * 60
+const createToken = (id,type) => {
+    return jwt.sign({id, type}, privateKey,{
+        expiresIn: maxAge
+    });
+      
+  };
+
+  
   
 
-module.exports = {validationRules,signUpValidation,hashPassword};
+module.exports = {validationRules,signUpValidation,hashPassword,createToken,maxAge,verifyPassword};
 

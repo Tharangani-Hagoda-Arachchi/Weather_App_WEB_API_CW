@@ -1,5 +1,8 @@
 const User = require('../models/user')
-const {hashPassword} = require('../utils/authUtils');
+const  cookies = require("cookies")
+const cookie = require("cookie-parser")
+const {hashPassword,createToken,maxAge,verifyPassword} = require('../utils/authUtils');
+
 
 
 const signUp = async (req, res) => {
@@ -15,7 +18,7 @@ const signUp = async (req, res) => {
         }
 
         const hashedPassword = await hashPassword(password);
-        console.log(hashedPassword);
+       
 
         // Create a new user
         const user = new User({
@@ -30,7 +33,27 @@ const signUp = async (req, res) => {
 
         console.log("user sucessfully created");
 
-        res.status(201).json({ message: 'User created successfully' });
+         // provide Token
+        const token = createToken(user._id,user.type);
+
+        // send cookies
+        res.cookie('SignIntoken', token, {
+            httpOnly: true,
+            maxAge: maxAge * 1000, 
+        });
+ 
+
+        res.status(201).json({
+            message: 'User created successfully and set cookies',
+            userId: user._id,
+            email: user.email,
+            name: user.name,
+            type: user.type,
+            token: token,
+           
+        });
+    
+       
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -38,5 +61,57 @@ const signUp = async (req, res) => {
     
 };
 
-module.exports = {signUp};
+
+
+
+const signIn = async (req, res) => {
+
+    // Extract user details from the request body
+    const { email, password} = req.body;
+
+    try {
+        // Check if the user already exists
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            const verifiedPassword = await verifyPassword(password,userExists.password)
+            console.log("verify");
+
+
+            if(verifiedPassword){
+                // provide Token
+                const token = createToken(userExists._id,userExists.type);
+
+                //set cookie
+                res.cookie('SignIntoken', token, {
+                    httpOnly: true,
+                    maxAge: maxAge * 1000, 
+                });
+       
+
+                res.status(201).json({
+                    message: 'User login successfully and set cookie',
+                    userId: userExists._id,
+                    email: userExists.email,
+                    name: userExists.name,
+                    type: userExists.type,
+                    token: token   
+                });
+    
+
+            } else{
+                res.status(400).json({ message: "Incorrect password" }); 
+            }
+
+        }else{
+            res.status(400).json({ message: "No user Found" }); 
+        }
+   
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+   
+};
+
+
+module.exports = {signUp,signIn};
 
