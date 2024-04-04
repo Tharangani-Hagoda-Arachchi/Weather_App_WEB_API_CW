@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema({
         required: [true, "User type is required!"]
     }
 }, {
+    versionKey:false,
     timestamps: true // Automatically manage createdAt and updatedAt fields
 });
 

@@ -70,8 +70,8 @@ const verifyPassword = async (password, hash) => {
 
 //create webtokens
 const maxAge = 3 * 24 * 60 * 60
-const createToken = (id,type) => {
-    return jwt.sign({id, type}, privateKey,{
+const createToken = (id,type,name) => {
+    return jwt.sign({id, type,name}, privateKey,{
         expiresIn: maxAge
     });
       

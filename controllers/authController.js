@@ -34,11 +34,11 @@ const signUp = async (req, res) => {
         console.log("user sucessfully created");
 
          // provide Token
-        const token = createToken(user._id,user.type);
+        const token = createToken(user._id,user.type,user.name);
 
         // send cookies
         res.cookie('SignIntoken', token, {
-            httpOnly: true,
+            
             maxAge: maxAge * 1000, 
         });
  
@@ -79,11 +79,11 @@ const signIn = async (req, res) => {
 
             if(verifiedPassword){
                 // provide Token
-                const token = createToken(userExists._id,userExists.type);
+                const token = createToken(userExists._id,userExists.type,userExists.name);
 
                 //set cookie
                 res.cookie('SignIntoken', token, {
-                    httpOnly: true,
+
                     maxAge: maxAge * 1000, 
                 });
        
