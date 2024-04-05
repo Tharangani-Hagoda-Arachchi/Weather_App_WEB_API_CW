@@ -7,7 +7,7 @@ const fs = require("fs");
 const publicKeyPath = process.env.PUBLIC_KEY_PATH;
 const publicKey = fs.readFileSync(publicKeyPath, 'utf8');
 
-const requireAuth =(req,res,next) =>{
+const requireAuth = (req,res,next) =>{
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
@@ -15,7 +15,8 @@ const requireAuth =(req,res,next) =>{
         return res.status(401).json({ message: 'Authentication token required' });
     }
 
-    jwt.verify(token, publicKey, (err, decoded) => {
+    jwt.verify(token, publicKey, { algorithms: ['RS256'] },  (err, decoded) => {
+       
         if (err) {
             return res.status(403).json({ message: 'Invalid token' });
         }
@@ -25,4 +26,4 @@ const requireAuth =(req,res,next) =>{
 }
 
 
-module.exports = {requireAuth}
+module.exports = requireAuth

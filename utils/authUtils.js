@@ -72,6 +72,7 @@ const verifyPassword = async (password, hash) => {
 const maxAge = 3 * 24 * 60 * 60
 const createToken = (id,type,name) => {
     return jwt.sign({id, type,name}, privateKey,{
+        algorithm: 'RS256',
         expiresIn: maxAge
     });
       

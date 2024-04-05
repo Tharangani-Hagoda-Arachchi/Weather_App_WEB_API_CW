@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+
 
 const weatherDataSchema = new mongoose.Schema({
     stationId: {

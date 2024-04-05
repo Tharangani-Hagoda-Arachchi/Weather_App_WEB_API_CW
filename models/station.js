@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
+
 
 const stationSchema = new mongoose.Schema({
     name: {
@@ -8,9 +9,9 @@ const stationSchema = new mongoose.Schema({
         
       },
    
-    province: {
+    district: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'provinces'
+        ref: 'districts'
 
     },
     latitude: {

@@ -1,4 +1,6 @@
-const provinceSchema = new mongoose.Schema({
+const mongoose = require('mongoose');
+
+const districtSchema = new mongoose.Schema({
     name: {
         type: String,
         maxlength: [100, "Name cannot exceed 100 characters!"],
@@ -12,6 +14,6 @@ const provinceSchema = new mongoose.Schema({
     timestamps: true,
   });
 
-const Provinces = mongoose.model('provinces', provinceSchema);
+const Districts = mongoose.model('districts', districtSchema);
 
-module.exports= Provinces;
+module.exports= Districts;
