@@ -19,7 +19,7 @@ async function weatherGenerator() {
       }
       allStationData[station.properties.station].push(stationData);
     }
-  }, 5000); //1000*60*5
+  },1000); //1000*60*5
 }
 
 async function saveWeatherData(station, data, coordinates) {

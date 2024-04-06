@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const requireAuth = require('../utils/protect')
 
 const {
   postWeatherData,

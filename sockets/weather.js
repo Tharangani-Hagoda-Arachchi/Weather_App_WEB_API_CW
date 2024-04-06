@@ -8,8 +8,12 @@ function socketHandler(server) {
     cors: {
       origin: "http://localhost:3000", // Client WEB IP
       methods: ["GET", "POST"],
+      credentials: true,
+
     },
   });
+
+ 
 
   console.log("Socket Loaded.");
 
