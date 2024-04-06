@@ -1,49 +1,32 @@
- //load variables from env
- require('dotenv').config();
- const bodyParser = require('body-parser');
- const {url} = require('url')
- const path = require('path')
- const weatherDataSocket = require ('./sockets/weatherDataSocket')
- //import mongoose instant
-const mongoose= require ('./configurations/dbconfig')
+const PORT = process.env.PORT || 3001;
+require("dotenv").config();
 
-const userRouts= require ('./routes/userRouts')
-const authRouts  = require ('./routes/authRouts')
-const stationRouts  = require ('./routes/stationRouts')
+//import mongoose to initialze
+require("./configurations/dbconfig");
+const bodyParser = require("body-parser");
+const socketHandler = require("./sockets/weather");
+const weatherGenerator = require("./utils/weatherGenerator");
 
-const express = require('express')
-const app = express()
+const userRouts = require("./routes/userRouts");
+const authRouts = require("./routes/authRouts");
+const weatherRouter = require("./routes/weatherRouter");
 
-const http = require('http')
-const{Server} = require('http')
-const server = http.createServer(app)
+// Initialize Express app
+const express = require("express");
+const app = express();
+app.use(express.json());
 app.use(bodyParser.json());
 
+app.use("/auths", authRouts);
+app.use("/api", userRouts);
+app.use("/api", weatherRouter);
 
+// Set up Express server
+const server = app.listen(PORT, () =>
+  console.log(`Server listening on port ${PORT}`)
+);
 
-app.use(express.json());
-const __filename3 = __filename;
-const myDirname = path.dirname(__filename3);
-
-const io = new Server(server);
-
-weatherDataSocket(app)
-app.get('/socket.io/socket.io.js/', (req, res) => {
-    console.log("dsss");
-    console.log(__dirname);
-  res.sendFile(__dirname + '/node_modules/socket.io/client-dist/socket.io.js');
-});
-
-app.use('/auths', authRouts);
-app.use('/api', userRouts);
-app.use('/api', stationRouts);
-
-app.listen(3000, () => console.log('server started'))
-
-
-
-
-
-
-
-
+// Open WebSocket connections
+socketHandler(server);
+// Weather Updater
+weatherGenerator();
