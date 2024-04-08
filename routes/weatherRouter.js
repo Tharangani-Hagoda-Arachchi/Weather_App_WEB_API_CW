@@ -10,4 +10,8 @@ const {
 router.post("/weathers", postWeatherData);
 router.get("/weathers", fetchWeatherData);
 
+//route with authorization
+//router.post("/weathers",requireAuth, postWeatherData);
+//router.get("/weathers",requireAuth, fetchWeatherData);
+
 module.exports = router;

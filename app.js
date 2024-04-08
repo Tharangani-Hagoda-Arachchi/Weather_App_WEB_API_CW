@@ -88,6 +88,92 @@ app.get('/api/users', (req, res) => {
 });
 app.use("/api", weatherRouter);
 
+/**
+ * @swagger
+ * /api/users:
+ *   post:
+ *     summary: Creates a new user
+ *     description: Creates a new user with the provided data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: The name of the user.
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The email address of the user.
+ *     responses:
+ *       '201':
+ *         description: User created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   description: The ID of the newly created user.
+ *                 name:
+ *                   type: string
+ *                   description: The name of the newly created user.
+ *                 email:
+ *                   type: string
+ *                   description: The email address of the newly created user.
+ *       '400':
+ *         description: Bad request. Invalid input data.
+ */
+app.post('/api/users', (req, res) => {
+  res.json({ message: 'Post users endpoint' });
+});
+
+
+
+/**
+ * @swagger
+ * /api/weather:
+ *   get:
+ *     summary: Retrieves a list of posts
+ *     description: Returns a list of all posts.
+ *     responses:
+ *       '200':
+ *         description: A list of staions.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               stations:
+ *                 type: string
+ *                 geometry:
+ *                     type: Number
+ *                    description: geometry
+ *                   coordinates:
+ *                     type: Number
+ *                 properties:
+ *                   station:
+ *                     type: string
+ *                     description: get staion name.
+ *                   temperature:
+ *                     type: Number
+ *                     description: get temperature
+ *                   humidity:
+ *                     type: Number
+ *                    description: humidity
+ *                   airPressure:
+ *                     type: Number
+ *                    description: airPressure
+ *                
+ *                  
+ */
+app.get('/api/weather', (req, res) => {
+  res.json({ message: 'Get users endpoint' });
+});
+
 // Set up Express server
 const server = app.listen(PORT, () =>
   console.log(`Server listening on port ${PORT}`)
